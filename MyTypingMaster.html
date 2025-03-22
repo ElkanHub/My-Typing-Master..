@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Typing Master</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: rgb(159, 159, 159);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      main {
+        margin: 0;
+        width: 700px;
+        height: 100vh;
+        padding: 0px 50px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: white;
+      }
+      h1 {
+        margin: 0;
+        padding: 20px;
+        align-self: flex-start;
+        margin-left: 30px;
+        /* background: linear-gradient(to right, transparent 10%, lightblue 50%, rgb(133, 133, 255));
+        border-radius: 20px;*/
+      }
+      .select-drill {
+        width: 600px;
+        height: 100px;
+        display: grid;
+        grid-template-columns: 100px 100px 100px 100px 100px;
+        grid-template-rows: 1fr 1fr;
+        gap: 5px;
+        padding: 3px;
+        border: solid rgba(0, 0, 0, 0.123) 1px;
+        border-radius: 8px;
+        justify-content: center;
+        background-color: rgb(229, 229, 229);
+      }
+      .select-drill button {
+        background-color: transparent;
+        border: none;
+        border-radius: 5px;
+        box-shadow: -2px -2px 5px rgba(255, 255, 255, 0.975), 2px 2px 5px rgba(0, 0, 0, 0.141);
+      }
+      .select-drill button:hover {
+        background-color: lightgrey;
+        box-shadow: inset -2px -2px 5px rgba(255, 255, 255, 0.975), inset 2px 2px 5px rgba(0, 0, 0, 0.141);
+      }
+      .preview-keys {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 25px;
+        text-align: center;
+        letter-spacing: 2px;
+        grid-column: span 4;
+        gap: 2px;
+      }
+      #inputCustomKeys {
+        width: 75%;
+        height: 100%;
+        padding-left: 5px;
+        font-size: 20px;
+      }
+      #doneCustomKeys {
+        height: 100%;
+        width: 100px;
+      }
+      .drill-screen {
+        width: 600px;
+        height: 400px;
+        display: grid;
+        align-items: center;
+        grid-template-columns: 1fr 1fr 1fr;
+        border: solid black 1px;
+      }
+      .failed-keys,
+      .passed-keys {
+        width: 100px;
+        height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        justify-self: center;
+        border: solid red 1px;
+        border-radius: 50%;
+      }
+      .current-key-container {
+        display: flex;
+        flex-direction: column;
+      }
+      .progress {
+        display: flex;
+        font-size: 25px;
+        justify-self: flex-start;
+        align-self: center;
+        align-items: center;
+        justify-content: center;
+      }
+      .current-key {
+        width: 200px;
+        height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: solid blue 1px;
+        border-radius: 50%;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>My Typing Master</h1>
+      <div class="select-drill">
+        <button id="fullKeys">Full Keys</button>
+        <button id="topRowKeys">Top Row Keys</button>
+        <button id="homeRowKeys">Home Row Keys</button>
+        <button id="bottomRowKeys">Bottom Row Keys</button>
+        <button id="customKeys">Custom Keys</button>
+        <div class="preview-keys">Preview Keys...</div>
+        <button id="endDrill">End Drill</button>
+      </div>
+      <div class="drill-screen">
+        <div class="failed-keys">23</div>
+        <div class="current-key-container">
+          <div class="progress">
+            <span class="done-keys">0</span>&UnderBar; out of&UnderBar;<span class="undone-keys">100</span>
+          </div>
+          <div class="current-key">A &comma;</div>
+        </div>
+        <div class="passed-keys">40</div>
+      </div>
+    </main>
+
+    <script>
+      const selectDrill = document.querySelector(".select-drill");
+      const fullkeys = document.getElementById("fullKeys");
+      const topRowkeys = document.getElementById("topRowKeys");
+      const homeRowkeys = document.getElementById("homeRowKeys");
+      const bottomRowkeys = document.getElementById("bottomRowKeys");
+      const customkeys = document.getElementById("customKeys");
+      const endDrillBtn = document.getElementById("endDrill");
+      const previewKeys = document.querySelector(".preview-keys");
+      const drillScreen = document.querySelector(".drill-screen");
+      const currentKey = document.querySelector(".current-key");
+
+      selectDrill.querySelectorAll("button").forEach((button) => (button.disabled = false));
+      let flag = false;
+
+      //for the active buttons
+      function drillIsActive(element) {
+        selectDrill.querySelectorAll("button").forEach((button) => {
+          if (button !== endDrillBtn) button.disabled = true;
+        });
+
+        runningDrill(element);
+      }
+
+      //the drill which is active
+      function runningDrill(currentEl) {
+        //contdown
+        let count = 5;
+        let interval = setInterval(function () {
+          document.querySelector(".current-key").textContent = count;
+          count--;
+          selectDrill.addEventListener("click", (event) => {
+            if (event.target.matches("#endDrill")) endActiveDrill(interval);
+          });
+
+          if (count < 0) {
+            clearInterval(interval);
+            //then call drill After countdown ends
+            switch (currentEl) {
+              case fullkeys:
+                //code to execute
+                fullKeysDrill();
+                break;
+              case topRowkeys:
+                //code to execute
+                topRowKeysDrill();
+                break;
+              case homeRowkeys:
+                //code to execute
+                homeRowKeysDrill();
+                break;
+              case bottomRowkeys:
+                //code to execute
+                bottomRowKeysDrill();
+                break;
+              case customkeys:
+                //code to execute
+                customKeysDrill();
+                break;
+            }
+          }
+        }, 1000);
+      }
+
+      selectDrill.addEventListener("click", function (event) {
+        if (event.target.matches("#homeRowKeys")) {
+          drillIsActive(homeRowkeys);
+        } else if (event.target.matches("#topRowKeys")) {
+          drillIsActive(topRowkeys);
+        } else if (event.target.matches("#bottomRowKeys")) {
+          drillIsActive(bottomRowkeys);
+        } else if (event.target.matches("#fullKeys")) {
+          drillIsActive(fullkeys);
+        } else if (event.target.matches("#customKeys")) {
+          drillIsActive(customkeys);
+        }
+      });
+
+      //arrays of drill keys
+      const topRowKeysArr = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"];
+      const homeRowKeysArr = ["a", "s", "d", "f", "g", "h", "j", "k", "l", ";"];
+      const bottomRowKeysArr = ["Z", "X", "C", "V", "B", "N", "M", ",", ".", "/"];
+      const fullKeysArr = topRowKeysArr.concat(homeRowKeysArr, bottomRowKeysArr);
+
+      //randomizer
+      function randomizer(min, max) {
+        return Math.floor(Math.random() * (max - min) + min);
+      }
+      //randomizer testing is now working properly
+      //this is the code u will use...then asign it to the textContent of the currentKey
+
+      let randomPreviewTxt = [
+        "One Drill At A Time",
+        "One More Drill Won't Hurt",
+        "Select Another Drill",
+        "Home Row Keys Are Nice",
+        "Keys Unlock Doors",
+      ];
+
+      //function to end Active drill
+      function endActiveDrill(setIntervalVariableId, activeDrillEl) {
+        // code to end all processes, most importantly, to end current drill
+        clearInterval(setIntervalVariableId);
+        currentKey.textContent = " ";
+        selectDrill.querySelectorAll("button").forEach((button) => (button.disabled = false));
+        //to print random text in preview when endDrill.
+        let randomPreviews = randomizer(0, randomPreviewTxt.length);
+        console.log(randomPreviews);
+        previewKeys.innerHTML = randomPreviewTxt[randomPreviews];
+        //reseting undoneKeysN and doneKeysN variables
+        undoneKeysN = 100;
+        doneKeysN = 0;
+        //reseting falied and passed keysN
+        passedKeysN = 0;
+        failedKeysN = 0;
+
+        //call local storage to store scores;
+      }
+
+      //Drills
+      function homeRowKeysDrill() {
+        previewKeys.innerHTML = homeRowKeysArr.join(" ").toUpperCase();
+        let interval = setInterval(() => {
+          let randomKeys = randomizer(0, homeRowKeysArr.length);
+          console.log(homeRowKeysArr[randomKeys].toUpperCase());
+          currentKey.textContent = homeRowKeysArr[randomKeys].toUpperCase();
+          //function to check keys will be in the function to doneCurrentKeys
+          doneCurrentKeys(interval); //reffering to the "2OutOf100"
+
+          //to end the Active drill
+          selectDrill.addEventListener("click", function (event) {
+            if (event.target.matches("#endDrill")) {
+              endActiveDrill(interval, homeRowkeys);
+            }
+          });
+        }, 2000);
+      }
+
+      function topRowKeysDrill() {
+        previewKeys.innerHTML = topRowKeysArr.join(" ").toUpperCase();
+        let interval = setInterval(() => {
+          let randomKeys = randomizer(0, topRowKeysArr.length);
+          console.log(topRowKeysArr[randomKeys].toUpperCase());
+          currentKey.textContent = topRowKeysArr[randomKeys].toUpperCase();
+          //call back function to check the clicked key to match current key
+          doneCurrentKeys(interval); //reffering to the "2OutOf100"
+          //to end the Active drill
+          selectDrill.addEventListener("click", function (event) {
+            if (event.target.matches("#endDrill")) {
+              endActiveDrill(interval, topRowkeys);
+            }
+          });
+        }, 2000);
+      }
+
+      function bottomRowKeysDrill() {
+        previewKeys.innerHTML = bottomRowKeysArr.join(" ").toUpperCase();
+        let interval = setInterval(() => {
+          let randomKeys = randomizer(0, bottomRowKeysArr.length);
+          console.log(bottomRowKeysArr[randomKeys].toUpperCase());
+          currentKey.textContent = bottomRowKeysArr[randomKeys].toUpperCase();
+          //call back function to check the clicked key to match current key
+          doneCurrentKeys(interval); //reffering to the "2OutOf100"
+          //to end the Active drill
+          selectDrill.addEventListener("click", function (event) {
+            if (event.target.matches("#endDrill")) {
+              endActiveDrill(interval, bottomRowkeys);
+            }
+          });
+        }, 2000);
+      }
+
+      function fullKeysDrill() {
+        previewKeys.innerHTML = fullKeysArr.join(" ").toUpperCase();
+        let interval = setInterval(() => {
+          let randomKeys = randomizer(0, fullKeysArr.length);
+          console.log(fullKeysArr[randomKeys].toUpperCase());
+          currentKey.textContent = fullKeysArr[randomKeys].toUpperCase();
+          //call back function to check the clicked key to match current key
+          doneCurrentKeys(interval); //reffering to the "2OutOf100"
+          //to end the Active drill
+          selectDrill.addEventListener("click", function (event) {
+            if (event.target.matches("#endDrill")) {
+              endActiveDrill(interval, fullkeys);
+            }
+          });
+        }, 2000);
+      }
+
+      function customKeysDrill() {
+        previewKeys.innerHTML = `<input id="inputCustomKeys" placeholder = "Which keys do you want to practice"/><button id = "doneCustomKeys">Done</button>`;
+        const inputCustomKeys = document.getElementById("inputCustomKeys");
+        const doneCustomKeys = document.getElementById("doneCustomKeys");
+
+        previewKeys.addEventListener("click", function (event) {
+          let inputValue = inputCustomKeys.value.trim().toUpperCase();
+          let customKeysArr = inputValue.split(",").map((key) => {
+            key = key.trim(); // Trim spaces
+
+            if (key === "COMMA") {
+              return "&comma;"; // Convert "comma" to ","
+            } else if (key.length > 1) {
+              return key.charAt(0); // Return first character if longer than 1
+            }
+
+            return key; // Return the trimmed key if no modifications
+          });
+
+          if (event.target.matches("#doneCustomKeys")) {
+            /*debug*/ console.log(customKeysArr);
+            previewKeys.innerHTML = customKeysArr.join(" ");
+            let interval = setInterval(() => {
+              let randomKeys = randomizer(0, customKeysArr.length);
+              console.log(customKeysArr[randomKeys].toUpperCase());
+              currentKey.textContent = customKeysArr[randomKeys].toUpperCase();
+              doneCurrentKeys(interval); //reffering to the "2OutOf100"
+              selectDrill.addEventListener("click", function (event) {
+                if (event.target.matches("#endDrill")) {
+                  endActiveDrill(interval, customkeys);
+                }
+              });
+            }, 2000);
+          }
+        });
+
+        //call back function to check the clicked key to match current key
+        //to end the Active drill
+      }
+
+      //checking the pressed key
+      //let correctKey = currentKey.textContent.trim(); // Example correct key
+      let passedKeys = document.querySelector(".passed-keys");
+      let failedKeys = document.querySelector(".failed-keys");
+      let passedKeysN = 0;
+      let failedKeysN = 0;
+
+      passedKeys.innerHTML = passedKeysN;
+      failedKeys.innerHTML = failedKeysN;
+
+      const doneKeys = document.querySelector(".done-keys");
+      const undoneKeys = document.querySelector(".undone-keys");
+      let undoneKeysN = 100;
+      let doneKeysN = 95;
+      function doneCurrentKeys(setIntervalVariableId) {
+        if (doneKeysN < undoneKeysN) {
+          doneKeysN++;
+          doneKeys.innerHTML = doneKeysN;
+          undoneKeys.innerHTML = undoneKeysN;
+          document.addEventListener("keydown", function (event) {
+            if (event.key === currentKey.innerHTML) {
+              checkKey(true);
+              document.removeEventListener("keydown")
+            } else {
+              checkKey(false);
+            }
+          });
+        } else {
+          endActiveDrill(setIntervalVariableId);
+          document.removeEventListener("keydown", checkKey());
+        }
+      }
+
+      function checkKey(event) {
+        console.log(`this is current keys textContent${currentKey.textContent}`);
+        if (event === currentKey.innerHTML) {
+          console.log("✅ Correct key pressed!");
+          passedKeysN++;
+          passedKeys.innerHTML = passedKeysN;
+        } else {
+          console.log("❌ Wrong key! No second chances.");
+          failedKeysN++;
+          failedKeys.innerHTML = failedKeysN;
+        }
+        // Remove the event listener after first key press (only one chance)
+        document.removeEventListener("keydown", checkKey());
+      }
+
+      // Add event listener to listen for key press (only once)
+    </script>
+  </body>
+</html>
