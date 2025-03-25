@@ -49,11 +49,13 @@
         background-color: transparent;
         border: none;
         border-radius: 5px;
-        box-shadow: -2px -2px 5px rgba(255, 255, 255, 0.975), 2px 2px 5px rgba(0, 0, 0, 0.141);
+        box-shadow: -2px -2px 5px rgba(255, 255, 255, 0.975),
+          2px 2px 5px rgba(0, 0, 0, 0.141);
       }
       .select-drill button:hover {
         background-color: lightgrey;
-        box-shadow: inset -2px -2px 5px rgba(255, 255, 255, 0.975), inset 2px 2px 5px rgba(0, 0, 0, 0.141);
+        box-shadow: inset -2px -2px 5px rgba(255, 255, 255, 0.975),
+          inset 2px 2px 5px rgba(0, 0, 0, 0.141);
       }
       .preview-keys {
         display: flex;
@@ -133,7 +135,10 @@
         <div class="failed-keys">23</div>
         <div class="current-key-container">
           <div class="progress">
-            <span class="done-keys">0</span>&UnderBar; out of&UnderBar;<span class="undone-keys">100</span>
+            <span class="done-keys">0</span>&UnderBar; out of&UnderBar;<span
+              class="undone-keys"
+              >100</span
+            >
           </div>
           <div class="current-key">A &comma;</div>
         </div>
@@ -153,8 +158,10 @@
       const drillScreen = document.querySelector(".drill-screen");
       const currentKey = document.querySelector(".current-key");
 
-      selectDrill.querySelectorAll("button").forEach((button) => (button.disabled = false));
-      let flag = false;
+      selectDrill
+        .querySelectorAll("button")
+        .forEach((button) => (button.disabled = false));
+     // let flag = false;
 
       //for the active buttons
       function drillIsActive(element) {
@@ -222,8 +229,22 @@
       //arrays of drill keys
       const topRowKeysArr = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"];
       const homeRowKeysArr = ["a", "s", "d", "f", "g", "h", "j", "k", "l", ";"];
-      const bottomRowKeysArr = ["Z", "X", "C", "V", "B", "N", "M", ",", ".", "/"];
-      const fullKeysArr = topRowKeysArr.concat(homeRowKeysArr, bottomRowKeysArr);
+      const bottomRowKeysArr = [
+        "Z",
+        "X",
+        "C",
+        "V",
+        "B",
+        "N",
+        "M",
+        ",",
+        ".",
+        "/",
+      ];
+      const fullKeysArr = topRowKeysArr.concat(
+        homeRowKeysArr,
+        bottomRowKeysArr
+      );
 
       //randomizer
       function randomizer(min, max) {
@@ -245,7 +266,9 @@
         // code to end all processes, most importantly, to end current drill
         clearInterval(setIntervalVariableId);
         currentKey.textContent = " ";
-        selectDrill.querySelectorAll("button").forEach((button) => (button.disabled = false));
+        selectDrill
+          .querySelectorAll("button")
+          .forEach((button) => (button.disabled = false));
         //to print random text in preview when endDrill.
         let randomPreviews = randomizer(0, randomPreviewTxt.length);
         console.log(randomPreviews);
@@ -347,7 +370,8 @@
             }
 
             return key; // Return the trimmed key if no modifications
-          });
+          }); // comment here.
+          // more changes just for something
 
           if (event.target.matches("#doneCustomKeys")) {
             /*debug*/ console.log(customKeysArr);
@@ -392,7 +416,7 @@
           document.addEventListener("keydown", function (event) {
             if (event.key === currentKey.innerHTML) {
               checkKey(true);
-              document.removeEventListener("keydown")
+              document.removeEventListener("keydown");
             } else {
               checkKey(false);
             }
@@ -403,8 +427,10 @@
         }
       }
 
-      function checkKey(event) {
-        console.log(`this is current keys textContent${currentKey.textContent}`);
+     /* function checkKey(event) {
+        console.log(
+          `this is current keys textContent${currentKey.textContent}`
+        );
         if (event === currentKey.innerHTML) {
           console.log("✅ Correct key pressed!");
           passedKeysN++;
@@ -417,7 +443,7 @@
         // Remove the event listener after first key press (only one chance)
         document.removeEventListener("keydown", checkKey());
       }
-
+*/
       // Add event listener to listen for key press (only once)
     </script>
   </body>
