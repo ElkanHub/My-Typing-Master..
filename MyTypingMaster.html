@@ -158,10 +158,15 @@
       const drillScreen = document.querySelector(".drill-screen");
       const currentKey = document.querySelector(".current-key");
 
+      let passedKeys = document.querySelector(".passed-keys");
+      let failedKeys = document.querySelector(".failed-keys");
+      let passedKeysN = 0;
+      let failedKeysN = 0;
+
       selectDrill
         .querySelectorAll("button")
         .forEach((button) => (button.disabled = false));
-     // let flag = false;
+      // let flag = false;
 
       //for the active buttons
       function drillIsActive(element) {
@@ -279,6 +284,15 @@
         //reseting falied and passed keysN
         passedKeysN = 0;
         failedKeysN = 0;
+        document.querySelector(".progress").textContent = `You did ${
+          doneKeys.textContent
+        }/${undoneKeys.textContent}, Passed: ${
+          passedKeys.textContent
+        }, failed: ${failedKeys.textContent} and left ${
+          Number(doneKeys.textContent) -
+          (Number(passedKeys.textContent) + Number(failedKeys.textContent))
+        }`;
+        //document.removeEventListener("keydown", checkKey);
 
         //call local storage to store scores;
       }
@@ -396,10 +410,6 @@
 
       //checking the pressed key
       //let correctKey = currentKey.textContent.trim(); // Example correct key
-      let passedKeys = document.querySelector(".passed-keys");
-      let failedKeys = document.querySelector(".failed-keys");
-      let passedKeysN = 0;
-      let failedKeysN = 0;
 
       passedKeys.innerHTML = passedKeysN;
       failedKeys.innerHTML = failedKeysN;
@@ -413,21 +423,26 @@
           doneKeysN++;
           doneKeys.innerHTML = doneKeysN;
           undoneKeys.innerHTML = undoneKeysN;
-          document.addEventListener("keydown", function (event) {
-            if (event.key === currentKey.innerHTML) {
-              checkKey(true);
-              document.removeEventListener("keydown");
-            } else {
-              checkKey(false);
-            }
-          });
+          //To check keys
+          document.addEventListener("keydown", checkKey, { once: true });
         } else {
           endActiveDrill(setIntervalVariableId);
-          document.removeEventListener("keydown", checkKey());
+          //document.removeEventListener("keydown", checkKey());
+        }
+      }
+      function checkKey(event) {
+        if (event.key.toUpperCase() === currentKey.textContent) {
+          passedKeysN = passedKeysN + 1;
+          passedKeys.textContent = passedKeysN;
+          console.log("passed");
+        } else {
+          failedKeysN = failedKeysN + 1;
+          failedKeys.textContent = failedKeysN;
+          console.log("failed");
         }
       }
 
-     /* function checkKey(event) {
+      /* function checkKey(event) {
         console.log(
           `this is current keys textContent${currentKey.textContent}`
         );
