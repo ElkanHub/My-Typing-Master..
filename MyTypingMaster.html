@@ -163,6 +163,8 @@
       let passedKeysN = 0;
       let failedKeysN = 0;
 
+      let originalProgress = document.querySelector(".progress").innerHTML;
+
       selectDrill
         .querySelectorAll("button")
         .forEach((button) => (button.disabled = false));
@@ -179,6 +181,10 @@
 
       //the drill which is active
       function runningDrill(currentEl) {
+        //seting the progress message
+        document.querySelector(".progress").innerHTML = originalProgress;
+        passedKeys.textContent = 0;
+        failedKeys.textContent = 0;
         //contdown
         let count = 5;
         let interval = setInterval(function () {
