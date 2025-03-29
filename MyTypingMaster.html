@@ -117,6 +117,32 @@
         border: solid blue 1px;
         border-radius: 50%;
       }
+
+      .progress-info {
+        position: relative;
+        display: inline-block;
+      }
+
+      .progress-modal {
+        top: -70px;
+        left: 30px;
+        width: 110px;
+        position: absolute;
+        display: none;
+        flex-direction: column;
+        gap: 3px;
+        padding: 5px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        background-color: white;
+        z-index: 2;
+      }
+      .progress-modal p {
+        margin: 0;
+      }
+      .show {
+        display: flex;
+      }
     </style>
   </head>
   <body>
@@ -139,6 +165,14 @@
               class="undone-keys"
               >100</span
             >
+            <div class="progress-info">
+              <button class="progress-button">&quest;</button>
+              <div class="progress-modal">
+                <p>Passed: <span class="passed">0</span></p>
+                <p>Failed: <span class="failed">0</span></p>
+                <p>Left: <span class="left">0</span></p>
+              </div>
+            </div>
           </div>
           <div class="current-key">A &comma;</div>
         </div>
@@ -158,17 +192,24 @@
       const drillScreen = document.querySelector(".drill-screen");
       const currentKey = document.querySelector(".current-key");
 
+      const progressBtn = document.querySelector(".progress-button");
+      const progressModal = document.querySelector(".progress-modal");
+
       let passedKeys = document.querySelector(".passed-keys");
       let failedKeys = document.querySelector(".failed-keys");
       let passedKeysN = 0;
       let failedKeysN = 0;
 
-      let originalProgress = document.querySelector(".progress").innerHTML;
-
       selectDrill
         .querySelectorAll("button")
         .forEach((button) => (button.disabled = false));
       // let flag = false;
+
+      //progress modal
+      progressBtn.addEventListener("click", function (event) {
+        progressModal.classList.toggle("show");
+      });
+      event.stopPropagation(); // Prevents immediate closing when clicking the button
 
       //for the active buttons
       function drillIsActive(element) {
@@ -181,9 +222,7 @@
 
       //the drill which is active
       function runningDrill(currentEl) {
-        //seting the progress message
         //reseting the progress message is not working well
-        document.querySelector(".progress").innerHTML = originalProgress;
         passedKeys.textContent = 0;
         failedKeys.textContent = 0;
         //contdown
@@ -291,14 +330,6 @@
         //reseting falied and passed keysN
         passedKeysN = 0;
         failedKeysN = 0;
-        document.querySelector(".progress").textContent = `You did ${
-          doneKeys.textContent
-        }/${undoneKeys.textContent}, Passed: ${
-          passedKeys.textContent
-        }, failed: ${failedKeys.textContent} and left ${
-          Number(doneKeys.textContent) -
-          (Number(passedKeys.textContent) + Number(failedKeys.textContent))
-        }`;
         //document.removeEventListener("keydown", checkKey);
 
         //call local storage to store scores;
