@@ -124,9 +124,9 @@
       }
 
       .progress-modal {
-        top: -70px;
+        top: -80px;
         left: 30px;
-        width: 110px;
+        width: 130px;
         position: absolute;
         display: none;
         flex-direction: column;
@@ -170,7 +170,8 @@
               <div class="progress-modal">
                 <p>Passed: <span class="passed">0</span></p>
                 <p>Failed: <span class="failed">0</span></p>
-                <p>Left: <span class="left">0</span></p>
+                <p>Skiped: <span class="skiped">0</span></p>
+                <p>Left with: <span class="left">0</span></p>
               </div>
             </div>
           </div>
@@ -208,8 +209,16 @@
       //progress modal
       progressBtn.addEventListener("click", function (event) {
         progressModal.classList.toggle("show");
+        event.stopPropagation(); // Prevents immediate closing when clicking the button
       });
-      event.stopPropagation(); // Prevents immediate closing when clicking the button
+      document.addEventListener("click", function (event) {
+        if (
+          !progressModal.contains(event.target) &&
+          event.target !== progressBtn
+        ) {
+          progressModal.classList.remove("show");
+        }
+      });
 
       //for the active buttons
       function drillIsActive(element) {
@@ -302,7 +311,6 @@
         return Math.floor(Math.random() * (max - min) + min);
       }
       //randomizer testing is now working properly
-      //this is the code u will use...then asign it to the textContent of the currentKey
 
       let randomPreviewTxt = [
         "One Drill At A Time",
@@ -328,11 +336,23 @@
         undoneKeysN = 100;
         doneKeysN = 0;
         //reseting falied and passed keysN
+        updateProgressModal();
+
         passedKeysN = 0;
         failedKeysN = 0;
-        //document.removeEventListener("keydown", checkKey);
 
         //call local storage to store scores;
+      }
+      function updateProgressModal() {
+        document.querySelector(".passed").textContent = passedKeys.innerHTML;
+        document.querySelector(".failed").textContent = failedKeys.innerHTML;
+
+        document.querySelector(".skiped").textContent =
+          Number(doneKeys.innerHTML) -
+          (Number(passedKeys.innerHTML) + Number(failedKeys.innerHTML));
+
+        document.querySelector(".left").textContent =
+          undoneKeysN - Number(doneKeys.innerHTML);
       }
 
       //Drills
