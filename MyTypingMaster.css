@@ -1,138 +1,186 @@
-      body {
-        margin: 0;
-        padding: 0;
-        background-color: rgb(159, 159, 159);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-      }
-      main {
-        margin: 0;
-        width: 700px;
-        height: 100vh;
-        padding: 0px 50px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        background-color: white;
-      }
-      h1 {
-        margin: 0;
-        padding: 20px;
-        align-self: flex-start;
-        margin-left: 30px;
-        /* background: linear-gradient(to right, transparent 10%, lightblue 50%, rgb(133, 133, 255));
-        border-radius: 20px;*/
-      }
-      .select-drill {
-        width: 600px;
-        height: 100px;
-        display: grid;
-        grid-template-columns: 100px 100px 100px 100px 100px;
-        grid-template-rows: 1fr 1fr;
-        gap: 5px;
-        padding: 3px;
-        border: solid rgba(0, 0, 0, 0.123) 1px;
-        border-radius: 8px;
-        justify-content: center;
-        background-color: rgb(229, 229, 229);
-      }
-      .select-drill button {
-        background-color: transparent;
-        border: none;
-        border-radius: 5px;
-        box-shadow: -2px -2px 5px rgba(255, 255, 255, 0.975),
-          2px 2px 5px rgba(0, 0, 0, 0.141);
-      }
-      .select-drill button:hover {
-        background-color: lightgrey;
-        box-shadow: inset -2px -2px 5px rgba(255, 255, 255, 0.975),
-          inset 2px 2px 5px rgba(0, 0, 0, 0.141);
-      }
-      .preview-keys {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 25px;
-        text-align: center;
-        letter-spacing: 2px;
-        grid-column: span 4;
-        gap: 2px;
-      }
-      #inputCustomKeys {
-        width: 75%;
-        height: 100%;
-        padding-left: 5px;
-        font-size: 20px;
-      }
-      #doneCustomKeys {
-        height: 100%;
-        width: 100px;
-      }
-      .drill-screen {
-        width: 600px;
-        height: 400px;
-        display: grid;
-        align-items: center;
-        grid-template-columns: 1fr 1fr 1fr;
-        border: solid black 1px;
-      }
-      .failed-keys,
-      .passed-keys {
-        width: 100px;
-        height: 100px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        justify-self: center;
-        border: solid red 1px;
-        border-radius: 50%;
-      }
-      .current-key-container {
-        display: flex;
-        flex-direction: column;
-      }
-      .progress {
-        display: flex;
-        font-size: 25px;
-        justify-self: flex-start;
-        align-self: center;
-        align-items: center;
-        justify-content: center;
-      }
-      .current-key {
-        width: 200px;
-        height: 200px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: solid blue 1px;
-        border-radius: 50%;
-      }
+* {
+  box-sizing: border-box;
+}
 
-      .progress-info {
-        position: relative;
-        display: inline-block;
-      }
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #fafafa;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #333333;
+}
 
-      .progress-modal {
-        top: -80px;
-        left: 30px;
-        width: 130px;
-        position: absolute;
-        display: none;
-        flex-direction: column;
-        gap: 3px;
-        padding: 5px;
-        border-radius: 10px;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-        background-color: white;
-        z-index: 2;
-      }
-      .progress-modal p {
-        margin: 0;
-      }
-      .show {
-        display: flex;
-      }
+main {
+  margin-top: 10px;
+  padding: 5px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #ffffff;
+  border: solid #d1d9e6 5px;
+  border-radius: 30px 30px 0px 0px;
+}
+
+h1 {
+  margin: 0;
+  padding: 20px;
+  align-self: flex-start;
+  margin-left: 30px;
+  color: #3f51b5;
+}
+
+.select-drill {
+  width: 600px;
+  height: 100px;
+  display: grid;
+  grid-template-columns: repeat(5, 100px);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 5px;
+  padding: 3px;
+  border: solid rgba(0, 0, 0, 0.123) 1px;
+  border-radius: 8px;
+  justify-content: center;
+  background-color: #e3e7f1;
+}
+
+.select-drill button,
+.progress-button {
+  background-color: transparent;
+  border: none;
+  border-radius: 5px;
+  box-shadow: -2px -2px 5px #c0c9dc, 2px 2px 5px rgba(0, 0, 0, 0.141);
+  color: #333333;
+}
+
+.select-drill button:hover, .progress-button:hover {
+  background-color: #7986cb;
+  color: #ffffff;
+}
+
+.preview-keys {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 25px;
+  text-align: center;
+  letter-spacing: 2px;
+  grid-column: span 4;
+  gap: 2px;
+  color: #5c6bc0;
+}
+
+#inputCustomKeys {
+  width: 75%;
+  height: 100%;
+  padding-left: 5px;
+  font-size: 20px;
+  background-color: #eceff1;
+  border: 2px solid #90a4ae;
+  color: #333333;
+}
+
+#doneCustomKeys {
+  height: 100%;
+  width: 100px;
+  background-color: #7986cb;
+  color: #ffffff;
+}
+
+.drill-screen {
+    margin-top: 5px;
+  width: 600px;
+  height: 395px;
+  display: grid;
+  align-items: center;
+  grid-template-columns: 1fr 1fr 1fr;
+  border: solid lightgray 1px;
+  background-color: #e3e7f1;
+}
+
+.failed-keys {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-self: center;
+  border: solid #d32f2f 1px;
+  border-radius: 50%;
+  background-color: #ffcdd2;
+  color: #333333;
+}
+
+.passed-keys {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-self: center;
+  border: solid #388e3c 1px;
+  border-radius: 50%;
+  background-color: #c8e6c9;
+  color: #333333;
+}
+
+.current-key-container {
+  display: flex;
+  flex-direction: column;
+  font-size: 50px;
+  gap: 20px;
+}
+
+.progress {
+    height: fit-content;
+  display: flex;
+  flex-direction: row;
+  font-size: 25px;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+  color: #5c6bc0;
+}
+
+.current-key {
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: solid #3f51b5 1px;
+  border-radius: 50%;
+  background-color: #7986cb;
+  color: #ffffff;
+}
+
+.progress-info {
+  position: relative;
+  display: inline-block;
+}
+
+.progress-modal {
+  top: -70px;
+  left: 30px;
+  width: 130px;
+  position: absolute;
+  display: none;
+  flex-direction: column;
+  gap: 3px;
+  padding: 5px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: #d1d9e6;
+  z-index: 2;
+  color: #333333;
+}
+
+.progress-modal p {
+  margin: 0;
+}
+
+.show {
+  display: flex;
+}
