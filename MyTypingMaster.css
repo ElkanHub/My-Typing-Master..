@@ -55,7 +55,8 @@ h1 {
   color: #333333;
 }
 
-.select-drill button:hover, .progress-button:hover {
+.select-drill button:hover,
+.progress-button:hover {
   background-color: #7986cb;
   color: #ffffff;
 }
@@ -90,7 +91,7 @@ h1 {
 }
 
 .drill-screen {
-    margin-top: 5px;
+  margin-top: 5px;
   width: 600px;
   height: 395px;
   display: grid;
@@ -134,7 +135,7 @@ h1 {
 }
 
 .progress {
-    height: fit-content;
+  height: fit-content;
   display: flex;
   flex-direction: row;
   font-size: 25px;
@@ -164,7 +165,7 @@ h1 {
 .progress-modal {
   top: -70px;
   left: 30px;
-  width: 130px;
+  width: 150px;
   position: absolute;
   display: none;
   flex-direction: column;
