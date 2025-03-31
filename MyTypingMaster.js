@@ -12,8 +12,8 @@ const currentKey = document.querySelector(".current-key");
 const progressBtn = document.querySelector(".progress-button");
 const progressModal = document.querySelector(".progress-modal");
 
-let passedKeys = document.querySelector(".passed-keys");
-let failedKeys = document.querySelector(".failed-keys");
+const passedKeys = document.querySelector(".passed-keys");
+const failedKeys = document.querySelector(".failed-keys");
 let passedKeysN = 0;
 let failedKeysN = 0;
 
@@ -158,6 +158,7 @@ function updateProgressModal() {
 function homeRowKeysDrill() {
   previewKeys.innerHTML = homeRowKeysArr.join(" ").toUpperCase();
   let interval = setInterval(() => {
+    blinkBorder(currentKey, "#3f51b5", "white");
     let randomKeys = randomizer(0, homeRowKeysArr.length);
     console.log(homeRowKeysArr[randomKeys].toUpperCase());
     currentKey.textContent = homeRowKeysArr[randomKeys].toUpperCase();
@@ -289,14 +290,23 @@ function doneCurrentKeys(setIntervalVariableId) {
 }
 function checkKey(event) {
   if (event.key.toUpperCase() === currentKey.textContent) {
+    blinkBorder(passedKeys, "#388e3c", "#388e3c");
     passedKeysN = passedKeysN + 1;
     passedKeys.textContent = passedKeysN;
     console.log("passed");
   } else {
+    blinkBorder(failedKeys, "#d32f2f", "#d32f2f");
     failedKeysN = failedKeysN + 1;
     failedKeys.textContent = failedKeysN;
     console.log("failed");
   }
+}
+
+function blinkBorder(element, originalColor, blinkColor) {
+  element.style.border = `solid ${blinkColor} 1.5px`;
+  setTimeout(() => {
+    element.style.border = `solid ${originalColor} 1px`;
+  }, 200);
 }
 
 /* function checkKey(event) {
